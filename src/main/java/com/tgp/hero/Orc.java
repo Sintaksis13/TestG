@@ -1,10 +1,11 @@
 package com.tgp.hero;
 
-import com.tgp.enemy.Mercenary;
+import com.tgp.arena.Arena;
+import com.tgp.enemy.NormalMercenary;
 import com.tgp.enemy.WeakMercenary;
 
 import java.io.IOException;
-import java.util.Random;
+import java.util.Scanner;
 
 public class Orc {
     private int attack = 5;
@@ -12,35 +13,18 @@ public class Orc {
 
     public void toArena() throws IOException {
         int oldHealth = health;
-        System.out.println("С каким типом людей вы хотите сразиться?\n 1. Слабый\n2. Вернуться назад");
-        int choice = System.in.read();
-        switch (choice) {
-            case 1: fight(new WeakMercenary(this));
-            default: System.exit(0);
+        System.out.println("С каким типом людей вы хотите сразиться?\n1. Слабый\n2. Средний\n3. Выйти");
+        System.out.print("\nВаш выбор: ");
+        int choice = new Scanner(System.in).nextInt();
+        if (choice == 1) {
+            Arena.getInstance().fight(this, new WeakMercenary(this));
+        } else if (choice == 2) {
+            Arena.getInstance().fight(this, new NormalMercenary(this));
+        } else {
+            System.exit(0);
         }
 
         health = oldHealth;
-    }
-
-    private void fight(Mercenary mercenary) {
-        Random random = new Random();
-        int chance = random.nextInt(2);
-        String whoAttackFirst;
-        if (chance == 0) {
-            whoAttackFirst = "Игрок";
-        } else {
-            whoAttackFirst = "Противник";
-        }
-        int damageToHero = 0;
-        int damageToEnemy = 0;
-        System.out.println("Первым наносит удар: " + whoAttackFirst);
-        for (int i = 1; i <= 5; i++) {
-            System.out.println(i + "-й раунд!");
-            if (chance == 0) {
-                mercenary.setHealth(mercenary.getHealth() - attack);
-
-            }
-        }
     }
 
     public int getAttack() {
@@ -57,5 +41,10 @@ public class Orc {
 
     public void setHealth(int health) {
         this.health = health;
+    }
+
+    @Override
+    public String toString() {
+        return "Игрок";
     }
 }
