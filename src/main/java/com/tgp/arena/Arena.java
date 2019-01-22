@@ -1,9 +1,13 @@
 package com.tgp.arena;
 
 import com.tgp.enemy.Mercenary;
+import com.tgp.enemy.NormalMercenary;
+import com.tgp.enemy.WeakMercenary;
+import com.tgp.exceptions.QuitException;
 import com.tgp.hero.Orc;
 
 import java.util.Random;
+import java.util.Scanner;
 
 public class Arena {
     private Random random = new Random();
@@ -13,7 +17,28 @@ public class Arena {
         return instance;
     }
 
-    public void fight(Orc hero, Mercenary enemy) {
+    public void enterArena(Orc hero) throws QuitException {
+        int oldHealth = hero.getHealth();
+        System.out.println("С каким типом людей вы хотите сразиться?\n1. Слабый\n2. Средний\n3. Выйти\n");
+        System.out.print("\nВаш выбор: ");
+        int choice = new Scanner(System.in).nextInt();
+        fight(hero, choice);
+        hero.setHealth(oldHealth);
+    }
+
+    public void fight(Orc hero, int choice) throws QuitException {
+        Mercenary enemy;
+        switch (choice) {
+            case 1: {
+                enemy = new WeakMercenary(hero);
+                break;
+            }
+            case 2: {
+                enemy = new NormalMercenary(hero);
+                break;
+            }
+            default: throw new QuitException();
+        }
         int heroStartHealth = hero.getHealth();
         int enemyStartHealth = enemy.getHealth();
         boolean heroAttackFirst = isHeroAttackFirst();
@@ -26,7 +51,8 @@ public class Arena {
         }
 
         System.out.println("Бой окончен! Победил " +
-                ((heroStartHealth - hero.getHealth()) < (enemyStartHealth - enemy.getHealth()) ? hero : enemy) + "\n\n");
+                ((heroStartHealth - hero.getHealth()) < (enemyStartHealth - enemy.getHealth()) ?
+                        hero.getName() : enemy.getName()) + "\n\n");
     }
 
     private boolean isHeroAttackFirst() {
@@ -37,11 +63,11 @@ public class Arena {
         System.out.println("\n" + roundNumber + "-й раунд!\n");
 
         if (heroAttackFirst) {
-            enemy.setHealth(attackResult(hero.toString(), hero.getAttack(), enemy.getHealth()));
-            hero.setHealth(attackResult(enemy.toString(), enemy.getAttack(), hero.getHealth()));
+            enemy.setHealth(attackResult(hero.getName(), hero.getAttack(), enemy.getHealth()));
+            hero.setHealth(attackResult(enemy.getName(), enemy.getAttack(), hero.getHealth()));
         } else {
-            hero.setHealth(attackResult(enemy.toString(), enemy.getAttack(), hero.getHealth()));
-            enemy.setHealth(attackResult(hero.toString(), hero.getAttack(), enemy.getHealth()));
+            hero.setHealth(attackResult(enemy.getName(), enemy.getAttack(), hero.getHealth()));
+            enemy.setHealth(attackResult(hero.getName(), hero.getAttack(), enemy.getHealth()));
         }
     }
 

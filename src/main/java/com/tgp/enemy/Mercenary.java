@@ -3,6 +3,7 @@ package com.tgp.enemy;
 public abstract class Mercenary {
     private int attack;
     private int health;
+    private String name = "Противник";
 
     public Mercenary(int attack, int health) {
         this.attack = attack;
@@ -25,8 +26,7 @@ public abstract class Mercenary {
         this.health = health;
     }
 
-    @Override
-    public String toString() {
-        return "Противник";
+    public String getName() {
+        return name;
     }
 }

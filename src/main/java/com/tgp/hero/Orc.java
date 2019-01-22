@@ -1,30 +1,16 @@
 package com.tgp.hero;
 
 import com.tgp.arena.Arena;
-import com.tgp.enemy.NormalMercenary;
-import com.tgp.enemy.WeakMercenary;
-
-import java.io.IOException;
-import java.util.Scanner;
+import com.tgp.exceptions.QuitException;
 
 public class Orc {
     private int attack = 5;
     private int health = 50;
+    private long gold = 100;
+    private String name = "Игрок";
 
-    public void toArena() throws IOException {
-        int oldHealth = health;
-        System.out.println("С каким типом людей вы хотите сразиться?\n1. Слабый\n2. Средний\n3. Выйти");
-        System.out.print("\nВаш выбор: ");
-        int choice = new Scanner(System.in).nextInt();
-        if (choice == 1) {
-            Arena.getInstance().fight(this, new WeakMercenary(this));
-        } else if (choice == 2) {
-            Arena.getInstance().fight(this, new NormalMercenary(this));
-        } else {
-            System.exit(0);
-        }
-
-        health = oldHealth;
+    public void toArena() throws QuitException {
+        Arena.getInstance().enterArena(this);
     }
 
     public int getAttack() {
@@ -43,8 +29,24 @@ public class Orc {
         this.health = health;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public long getGold() {
+        return gold;
+    }
+
+    public void setGold(long gold) {
+        this.gold = gold;
+    }
+
     @Override
     public String toString() {
-        return "Игрок";
+        return "Статистика:" +
+                "\nИмя: " + name +
+                "\nАтака: " + attack +
+                "\nЗдоровье: " + health +
+                "\nЗолото: " + gold + "\n\n";
     }
 }
