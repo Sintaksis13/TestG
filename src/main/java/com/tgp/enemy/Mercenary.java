@@ -10,6 +10,8 @@ public abstract class Mercenary {
         this.health = health;
     }
 
+    public abstract int getRewardAmount();
+
     public int getAttack() {
         return attack;
     }

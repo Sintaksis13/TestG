@@ -2,13 +2,13 @@ package com.tgp;
 
 import com.tgp.exceptions.QuitException;
 import com.tgp.hero.Orc;
+import com.tgp.training.TrainingCamp;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        Orc orc = new Orc();
+    public static void main(String[] args) {
+        Orc hero = new Orc();
         while (true) {
             try {
                 System.out.println("*****Меню*****");
@@ -17,15 +17,15 @@ public class Main {
                 int choice = sc.nextInt();
                 switch (choice) {
                     case 1: {
-                        orc.toArena();
+                        hero.toArena();
                         break;
                     }
                     case 2: {
-                        //training camp
+                        TrainingCamp.getInstance().increaseAttack(hero);
                         break;
                     }
                     case 3: {
-                        System.out.println(orc);
+                        System.out.println(hero);
                         break;
                     }
                     default: {

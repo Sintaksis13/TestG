@@ -37,8 +37,8 @@ public class Orc {
         return gold;
     }
 
-    public void setGold(long gold) {
-        this.gold = gold;
+    public void changeHeroGold(int amount) {
+        gold = gold + amount;
     }
 
     @Override

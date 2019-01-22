@@ -26,7 +26,7 @@ public class Arena {
         hero.setHealth(oldHealth);
     }
 
-    public void fight(Orc hero, int choice) throws QuitException {
+    private void fight(Orc hero, int choice) throws QuitException {
         Mercenary enemy;
         switch (choice) {
             case 1: {
@@ -50,9 +50,11 @@ public class Arena {
             }
         }
 
-        System.out.println("Бой окончен! Победил " +
-                ((heroStartHealth - hero.getHealth()) < (enemyStartHealth - enemy.getHealth()) ?
-                        hero.getName() : enemy.getName()) + "\n\n");
+        boolean heroWin = (heroStartHealth - hero.getHealth()) < (enemyStartHealth - enemy.getHealth());
+        System.out.println("Бой окончен! Победил " + (heroWin ? hero.getName() : enemy.getName()) + "\n\n");
+        if (heroWin) {
+            hero.changeHeroGold(enemy.getRewardAmount());
+        }
     }
 
     private boolean isHeroAttackFirst() {
