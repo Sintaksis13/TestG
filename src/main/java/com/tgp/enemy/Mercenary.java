@@ -3,9 +3,8 @@ package com.tgp.enemy;
 public abstract class Mercenary {
     private int attack;
     private int health;
-    private String name = "Противник";
 
-    public Mercenary(int attack, int health) {
+    Mercenary(int attack, int health) {
         this.attack = attack;
         this.health = health;
     }
@@ -14,10 +13,6 @@ public abstract class Mercenary {
 
     public int getAttack() {
         return attack;
-    }
-
-    public void setAttack(int attack) {
-        this.attack = attack;
     }
 
     public int getHealth() {
@@ -29,6 +24,6 @@ public abstract class Mercenary {
     }
 
     public String getName() {
-        return name;
+        return "Противник";
     }
 }

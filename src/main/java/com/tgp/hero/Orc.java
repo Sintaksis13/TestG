@@ -4,10 +4,30 @@ import com.tgp.arena.Arena;
 import com.tgp.exceptions.QuitException;
 
 public class Orc {
-    private int attack = 5;
-    private int health = 50;
-    private long gold = 100;
-    private String name = "Игрок";
+    private static final int DEFAULT_ATTACK = 5;
+    private static final int DEFAULT_HEALTH = 50;
+    private static final long DEFAULT_GOLD_AMOUNT = 100;
+    private static final String DEFAULT_NAME = "Игрок";
+
+    private int attack;
+    private int health;
+    private long gold;
+    private String name;
+
+    public Orc() {
+        //default constructor
+        this.attack = DEFAULT_ATTACK;
+        this.health = DEFAULT_HEALTH;
+        this.gold = DEFAULT_GOLD_AMOUNT;
+        this.name = DEFAULT_NAME;
+    }
+
+    public Orc(String name, int health, int attack, long gold) {
+        this.name = name;
+        this.health = health;
+        this.attack = attack;
+        this.gold = gold;
+    }
 
     public void toArena() throws QuitException {
         Arena.getInstance().enterArena(this);
