@@ -26,4 +26,8 @@ public class Randomizer {
 
         return result;
     }
+
+    public static void main(String[] args) {
+
+    }
 }
