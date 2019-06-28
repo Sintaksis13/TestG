@@ -5,20 +5,19 @@ import com.testg.cards.Card;
 import javax.persistence.Entity;
 
 @Entity
-public abstract class Minion extends Card {
+public class Minion extends Card {
     private int hp;
     private int ap;
     private String name;
 
-    public Minion(byte cost) {
-        super(cost);
+    public Minion() {
     }
 
-    public Minion(byte cost, int hp, int ap, String name) {
+    public Minion(String name, int ap, int hp, byte cost) {
         super(cost);
-        this.hp = hp;
-        this.ap = ap;
         this.name = name;
+        this.ap = ap;
+        this.hp = hp;
     }
 
     public int getHp() {
@@ -47,6 +46,6 @@ public abstract class Minion extends Card {
 
     @Override
     public String toString() {
-        return String.format("Minion[name = '%s', hp = '%d', ap = '%d']", name, hp, ap);
+        return String.format("Minion[name = '%s', ap = '%d', hp = '%d', cost = '%d']", name, ap, hp, getCost());
     }
 }

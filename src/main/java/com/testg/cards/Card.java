@@ -9,7 +9,11 @@ import javax.persistence.MappedSuperclass;
 public abstract class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
     private byte cost;
+
+    public Card() {
+    }
 
     public Card(byte cost) {
         this.cost = cost;
@@ -21,5 +25,13 @@ public abstract class Card {
 
     public void setCost(byte cost) {
         this.cost = cost;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }
