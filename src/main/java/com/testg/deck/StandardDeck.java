@@ -5,5 +5,5 @@ import com.testg.cards.Card;
 import java.util.List;
 
 public class StandardDeck implements Deck {
-    private final List<Card> playerDeck = null;
+    private final List<Card> deck = null;
 }

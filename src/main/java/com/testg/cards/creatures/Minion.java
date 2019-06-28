@@ -1,66 +1,52 @@
 package com.testg.cards.creatures;
 
 import com.testg.cards.Card;
-import com.testg.cards.effects.Effect;
 
-import java.util.Arrays;
-import java.util.List;
+import javax.persistence.Entity;
 
+@Entity
 public abstract class Minion extends Card {
-    private long currentHP;
-    private long baseHP;
-    private long currentAP;
-    private long baseAP;
-    private boolean canAttack;
-    private List<Effect> effects;
+    private int hp;
+    private int ap;
+    private String name;
 
-    public Minion(byte cost, long healthPoints, long attackPoints, boolean canAttack, Effect... effects) {
+    public Minion(byte cost) {
         super(cost);
-        this.currentHP = healthPoints;
-        this.baseHP = healthPoints;
-        this.currentAP = attackPoints;
-        this.baseAP = attackPoints;
-        this.canAttack = canAttack;
-        this.effects = Arrays.asList(effects);
     }
 
-    public long getCurrentHP() {
-        return currentHP;
+    public Minion(byte cost, int hp, int ap, String name) {
+        super(cost);
+        this.hp = hp;
+        this.ap = ap;
+        this.name = name;
     }
 
-    public void setCurrentHP(long currentHP) {
-        this.currentHP = currentHP;
+    public int getHp() {
+        return hp;
     }
 
-    public long getCurrentAP() {
-        return currentAP;
+    public void setHp(int hp) {
+        this.hp = hp;
     }
 
-    public void setCurrentAP(long currentAP) {
-        this.currentAP = currentAP;
+    public int getAp() {
+        return ap;
     }
 
-    public List<Effect> getEffects() {
-        return effects;
+    public void setAp(int ap) {
+        this.ap = ap;
     }
 
-    public void setEffects(List<Effect> effects) {
-        this.effects = effects;
+    public String getName() {
+        return name;
     }
 
-    public long getBaseHP() {
-        return baseHP;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setBaseHP(long baseHP) {
-        this.baseHP = baseHP;
-    }
-
-    public long getBaseAP() {
-        return baseAP;
-    }
-
-    public void setBaseAP(long baseAP) {
-        this.baseAP = baseAP;
+    @Override
+    public String toString() {
+        return String.format("Minion[name = '%s', hp = '%d', ap = '%d']", name, hp, ap);
     }
 }

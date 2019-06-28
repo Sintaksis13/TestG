@@ -1,6 +1,14 @@
 package com.testg.cards;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+
+@MappedSuperclass
 public abstract class Card {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private byte cost;
 
     public Card(byte cost) {
