@@ -8,7 +8,10 @@
 </head>
 <body>
 <h3>Добро пожаловать на главную страницу игры "Войны крестоновцев"</h3>
-<div id="app"></div>
+<div id="app">
+    <input v-model="message" placeholder="отредактируй меня">
+    <p>Введённое сообщение: {{ message }}</p>
+</div>
 <script src="js/main.js"></script>
 </body>
 </html>
