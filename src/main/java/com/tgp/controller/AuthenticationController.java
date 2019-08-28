@@ -1,7 +1,9 @@
 package com.tgp.controller;
 
 import com.tgp.entity.Player;
+import com.tgp.entity.transport.PlayerAuthData;
 import com.tgp.service.PlayerService;
+import com.tgp.service.response.ServiceResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,5 +25,11 @@ public class AuthenticationController {
     public ResponseEntity<Player> createNewPlayer(@RequestBody Player player) {
         boolean created = playerService.createNewPlayer(player);
         return created ? ResponseEntity.ok(player) : ResponseEntity.badRequest().body(player);
+    }
+
+    @PostMapping("auth")
+    public ResponseEntity<Player> authPlayer(@RequestBody PlayerAuthData authData) {
+        ServiceResponse<Player> response = playerService.authenticatePlayer(authData);
+        return new ResponseEntity<>(response.getObject(), response.getStatus());
     }
 }

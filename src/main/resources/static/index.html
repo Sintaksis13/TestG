@@ -8,10 +8,15 @@
 </head>
 <body>
 <h3>Добро пожаловать на главную страницу игры "Войны крестоновцев"</h3>
-<div id="app">
-    <input v-model="message" placeholder="отредактируй меня">
-    <p>Введённое сообщение: {{ message }}</p>
-</div>
+<div id="auth">
+    <span v-if="logged">
+        Привет, {{fullName}}<br>
+    </span>
+    <input v-model="login" placeholder="Логин">
+    <input v-model="password" placeholder="пароль" type="password">
+    <button v-on:click="sendAuthRequest">Войти</button>
+</div><br>
+<button onclick="goToRegister()">Регистрация</button>
 <script src="js/main.js"></script>
 </body>
 </html>

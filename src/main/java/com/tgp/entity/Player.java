@@ -13,7 +13,7 @@ public class Player {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     @NonNull
-    private String userName;
+    private String login;
     @NonNull
     private String password;
     @NonNull
