@@ -1,12 +1,10 @@
 package com.tgp.service;
 
 import com.tgp.entity.Player;
-import com.tgp.entity.transport.PlayerAuthData;
 import com.tgp.repository.PlayerRepository;
-import com.tgp.service.response.ServiceResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.lang.NonNull;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,27 +16,24 @@ public class PlayerService {
         this.repository = repository;
     }
 
-    public boolean createNewPlayer(Player player) {
-        Player dbPlayer = repository.findByLoginOrEmail(player.getLogin(), player.getEmail());
-        if (dbPlayer != null) {
-            return false;
-        }
-
-        repository.save(player);
-        return true;
+    public ResponseEntity<String> getPlayerForAuth(String login, String password) {
+        Player dbPlayer = repository.findByLogin(login);
+        HttpStatus status = getAuthStatus(dbPlayer, password);
+        return new ResponseEntity<>(getAuthMessage(dbPlayer, status), status);
     }
 
-    public ServiceResponse<Player> authenticatePlayer(@NonNull PlayerAuthData data) {
-        ServiceResponse<Player> response;
-        Player dbPlayer = repository.findByLogin(data.getLogin());
-        if (dbPlayer == null) {
-            response = new ServiceResponse<>(null, "", HttpStatus.NOT_FOUND);
-        } else if (!dbPlayer.getPassword().equals(data.getPassword())) {
-            response = new ServiceResponse<>(dbPlayer, "", HttpStatus.BAD_REQUEST);
+    private String getAuthMessage(Player playerData, HttpStatus status) {
+        String message;
+        if (status.equals(HttpStatus.OK)) {
+            message = "Добро пожаловать, " + playerData.getFullName();
         } else {
-            response = new ServiceResponse<>(dbPlayer, "", HttpStatus.OK);
+            message = "Неверный логин или пароль!";
         }
 
-        return response;
+        return message;
+    }
+
+    private HttpStatus getAuthStatus(Player playerData, String password) {
+        return playerData != null && playerData.getPassword().equals(password) ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
     }
 }

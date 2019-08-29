@@ -1,17 +1,19 @@
 package com.tgp.controller;
 
 import com.tgp.entity.Player;
-import com.tgp.entity.transport.PlayerAuthData;
 import com.tgp.service.PlayerService;
-import com.tgp.service.response.ServiceResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+import javax.validation.constraints.NotNull;
+
+@Controller
 @RequestMapping("player")
 public class AuthenticationController {
     private PlayerService playerService;
@@ -21,15 +23,26 @@ public class AuthenticationController {
         this.playerService = playerService;
     }
 
-    @PostMapping
-    public ResponseEntity<Player> createNewPlayer(@RequestBody Player player) {
-        boolean created = playerService.createNewPlayer(player);
-        return created ? ResponseEntity.ok(player) : ResponseEntity.badRequest().body(player);
+    @GetMapping("login")
+    public String loginPage() {
+        return "login";
+    }
+
+    @GetMapping("register")
+    public String registerPage() {
+        return "register";
+    }
+
+    @PostMapping("create")
+    public String createNewPlayer(@NotNull String login, @NotNull String password,
+                                                  @NotNull String email, Model model) {
+        return "register";
     }
 
     @PostMapping("auth")
-    public ResponseEntity<Player> authPlayer(@RequestBody PlayerAuthData authData) {
-        ServiceResponse<Player> response = playerService.authenticatePlayer(authData);
-        return new ResponseEntity<>(response.getObject(), response.getStatus());
+    public String authPlayer(Model model, String login, String password) {
+        ResponseEntity<String> response = playerService.getPlayerForAuth(login, password);
+        model.addAttribute("authMessage", response.getBody());
+        return response.getStatusCode().isError() ? "login" : "main";
     }
 }

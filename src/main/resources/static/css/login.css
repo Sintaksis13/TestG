@@ -1,0 +1,15 @@
+table {
+    border-collapse: collapse;
+}
+td {
+    border-style: groove;
+    border-radius: 3px;
+    border-width: 4px;
+    border-top: 0;
+}
+th {
+    border-style: groove;
+    border-radius: 3px;
+    border-width: 4px;
+    border-bottom: 0;
+}

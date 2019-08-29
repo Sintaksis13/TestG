@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Барбакан</title>
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+<table>
+    <tr>
+        <th>Чтобы войти в крепость, назови своё имя, крестоносец!</th>
+        <th>Впервые в этих краях? Иди к распорядителю.</th>
+    </tr>
+    <tr>
+        <td>
+            <form method="post" action="/player/auth">
+                <label><input type="text" name="login" placeholder="Имя" required minlength="3" maxlength="15"></label>
+                <label><input type="password" name="password" placeholder="Кодовое слово" required minlength="4"></label><br>
+                <input type="submit" value="Войти в замок">
+            </form>
+        </td>
+        <td>
+            <form method="get" action="/player/register">
+                <input type="submit" value="К распорядителю">
+            </form>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <img src="/pics/barbican.jpg" alt="Барбакан">
+        </td>
+    </tr>
+</table>
+</body>
+</html>
