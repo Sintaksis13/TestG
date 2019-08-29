@@ -16,10 +16,11 @@ public class PlayerService {
         this.repository = repository;
     }
 
-    public ResponseEntity<String> getPlayerForAuth(String login, String password) {
+    public ResponseEntity<String> checkPlayerForAuth(String login, String password) {
         Player dbPlayer = repository.findByLogin(login);
         HttpStatus status = getAuthStatus(dbPlayer, password);
-        return new ResponseEntity<>(getAuthMessage(dbPlayer, status), status);
+        String message = getAuthMessage(dbPlayer, status);
+        return new ResponseEntity<>(message, status);
     }
 
     private String getAuthMessage(Player playerData, HttpStatus status) {

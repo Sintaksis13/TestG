@@ -1,9 +1,7 @@
 package com.tgp.controller;
 
-import com.tgp.entity.Player;
 import com.tgp.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,7 +39,7 @@ public class AuthenticationController {
 
     @PostMapping("auth")
     public String authPlayer(Model model, String login, String password) {
-        ResponseEntity<String> response = playerService.getPlayerForAuth(login, password);
+        ResponseEntity<String> response = playerService.checkPlayerForAuth(login, password);
         model.addAttribute("authMessage", response.getBody());
         return response.getStatusCode().isError() ? "login" : "main";
     }
