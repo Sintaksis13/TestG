@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface PlayerRepository extends CrudRepository<Player, Long> {
     Player findByLoginOrEmail(String login, String email);
     Player findByLogin(String login);
+    Player findByEmail(String email);
 }

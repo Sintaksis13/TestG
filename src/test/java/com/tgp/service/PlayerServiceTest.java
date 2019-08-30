@@ -2,13 +2,13 @@ package com.tgp.service;
 
 import com.tgp.entity.Player;
 import com.tgp.repository.PlayerRepository;
+import com.tgp.service.response.ResponseEntity;
+import com.tgp.service.response.ResponseStatus;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
@@ -28,24 +28,43 @@ public class PlayerServiceTest {
     public void setUp() {
         Player expectedPlayer = new Player(LOGIN, PASSWORD, FULL_NAME, EMAIL);
         when(repository.findByLogin(LOGIN)).thenReturn(expectedPlayer);
+        when(repository.findByEmail(EMAIL)).thenReturn(expectedPlayer);
         service = new PlayerService(repository);
     }
 
     @Test
-    public void testAuthWithWrongLogin() {
-        ResponseEntity<String> response = service.checkPlayerForAuth("wrong login", PASSWORD);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    public void testAuth_withWrongLogin() {
+        ResponseEntity<Player> response = service.checkPlayerForAuth("wrong login", PASSWORD);
+        assertEquals(ResponseStatus.ACCOUNT_NOT_FOUND, response.getStatus());
     }
 
     @Test
-    public void testAuthWithWrongPassword() {
-        ResponseEntity<String> response = service.checkPlayerForAuth(LOGIN, "wrong password");
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    public void testAuth_withWrongPassword() {
+        ResponseEntity<Player> response = service.checkPlayerForAuth(LOGIN, "wrong password");
+        assertEquals(ResponseStatus.INVALID_PASSWORD, response.getStatus());
     }
 
     @Test
-    public void testAuthSuccess() {
-        ResponseEntity<String> response = service.checkPlayerForAuth(LOGIN, PASSWORD);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+    public void testAuth_success() {
+        ResponseEntity<Player> response = service.checkPlayerForAuth(LOGIN, PASSWORD);
+        assertEquals(ResponseStatus.AUTHENTICATED_SUCCESSFULLY, response.getStatus());
+    }
+
+    @Test
+    public void testRegister_success() {
+        ResponseEntity<Player> response = service.registerPlayer("new", "pass", "full", "email");
+        assertEquals(ResponseStatus.ACCOUNT_CREATED, response.getStatus());
+    }
+
+    @Test
+    public void testRegister_withExistedLogin() {
+        ResponseEntity<Player> response = service.registerPlayer(LOGIN, "pass", "full", "email");
+        assertEquals(ResponseStatus.LOGIN_NOT_VACANT, response.getStatus());
+    }
+
+    @Test
+    public void testRegister_withExistedEmail() {
+        ResponseEntity<Player> response = service.registerPlayer("new", "pass", "full", EMAIL);
+        assertEquals(ResponseStatus.EMAIL_NOT_VACANT, response.getStatus());
     }
 }
