@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Страница регистрации</title>
 </head>
 <body>
+<p th:text="${message}"></p>
 <form action="/player/create" method="post">
     <label><input type="text" name="login" placeholder="Имя (логин)" required minlength="3" maxlength="15"></label><br>
     <label><input type="email" name="email" placeholder="Почтовый адрес (email)" required></label><br>
