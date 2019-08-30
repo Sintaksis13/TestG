@@ -8,5 +8,13 @@
 <body>
 <h3>Добро пожаловать на главную страницу игры "Войны крестоносцев"</h3>
 <p th:text="${message}"></p>
+<form method="post" action="/player/change">
+    <label><input type="email" name="email" th:value="${player.getEmail()}" required></label><br>
+    <label><input type="password" name="oldPassword" required></label><br>
+    <label><input type="password" name="newPassword" required minlength="4"></label><br>
+    <label><input type="text" name="fullName" th:value="${player.getFullName()}" required></label><br>
+    <input type="hidden" name="login" th:value="${player.getLogin()}">
+    <input type="submit" value="Сменить данные">
+</form>
 </body>
 </html>

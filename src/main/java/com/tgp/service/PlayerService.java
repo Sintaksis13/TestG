@@ -52,6 +52,36 @@ public class PlayerService {
         return response;
     }
 
+    public ResponseEntity<Player> changePlayerData(String email, String oldPassword, String newPassword,
+                                                   String fullName, String login) {
+        Player dbPlayer = repository.findByLogin(login);
+        ResponseEntity<Player> response;
+        try {
+            if (dbPlayer == null) {
+                response = generateResponse(null, ResponseStatus.ACCOUNT_NOT_FOUND);
+            } else if (!dbPlayer.getPassword().equals(oldPassword)) {
+                response = generateResponse(dbPlayer, ResponseStatus.INVALID_PASSWORD);
+            } else if (!isEmailVacant(email, login)) {
+                response = generateResponse(dbPlayer, ResponseStatus.EMAIL_NOT_VACANT);
+            } else {
+                dbPlayer.setEmail(email);
+                dbPlayer.setPassword(newPassword);
+                dbPlayer.setFullName(fullName);
+                Player savedPlayer = repository.save(dbPlayer);
+                response = generateResponse(savedPlayer, ResponseStatus.DATA_SUCCESSFULLY_CHANGED);
+            }
+        } catch (Exception e) {
+            response = new ResponseEntity<>(null, "Internal error", ResponseStatus.INTERNAL_ERROR);
+        }
+
+        return response;
+    }
+
+    private boolean isEmailVacant(String email, String login) {
+        Player byEmail = repository.findByEmail(email);
+        return byEmail == null || byEmail.getLogin().equals(login);
+    }
+
     private ResponseStatus getAuthStatus(Player playerData, String password) {
         ResponseStatus status;
         if (playerData == null) {
@@ -65,6 +95,7 @@ public class PlayerService {
         return status;
     }
 
+    //TODO move message creating to enum
     private ResponseEntity<Player> generateResponse(Player data, ResponseStatus status) throws IllegalStatusException {
         String message;
         switch (status) {
@@ -90,6 +121,18 @@ public class PlayerService {
             }
             case ACCOUNT_NOT_FOUND: {
                 message = "Аккаунт с такими данными не найден";
+                break;
+            }
+            case INTERNAL_ERROR: {
+                message = "Внутренняя ошибка сервера";
+                break;
+            }
+            case PASSWORD_MISS_MATCH: {
+                message = "Пароли не совпадают";
+                break;
+            }
+            case DATA_SUCCESSFULLY_CHANGED: {
+                message = "Данные успешно изменены";
                 break;
             }
             default: {

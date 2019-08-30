@@ -29,6 +29,7 @@ public class PlayerServiceTest {
         Player expectedPlayer = new Player(LOGIN, PASSWORD, FULL_NAME, EMAIL);
         when(repository.findByLogin(LOGIN)).thenReturn(expectedPlayer);
         when(repository.findByEmail(EMAIL)).thenReturn(expectedPlayer);
+        when(repository.save(expectedPlayer)).thenReturn(expectedPlayer);
         service = new PlayerService(repository);
     }
 
@@ -66,5 +67,54 @@ public class PlayerServiceTest {
     public void testRegister_withExistedEmail() {
         ResponseEntity<Player> response = service.registerPlayer("new", "pass", "full", EMAIL);
         assertEquals(ResponseStatus.EMAIL_NOT_VACANT, response.getStatus());
+    }
+
+    @Test
+    public void testChangeData_success() {
+        String newPassword = "pass";
+        String newEmail = "em@em.ru";
+        String newFullName = "newFN";
+
+        ResponseEntity<Player> response = service.changePlayerData(newEmail, PASSWORD, newPassword, newFullName , LOGIN);
+        Player savedPlayer = response.getObject();
+
+        assertEquals(ResponseStatus.DATA_SUCCESSFULLY_CHANGED, response.getStatus());
+        assertEquals(newPassword, savedPlayer.getPassword());
+        assertEquals(newEmail, savedPlayer.getEmail());
+    }
+
+    @Test
+    public void testChangeData_withWrongPassword() {
+        String oldPassword = "wrong";
+        String newPassword = "pass";
+        String newEmail = "em@em.ru";
+        String newFullName = "newFN";
+
+        ResponseEntity<Player> response = service.changePlayerData(newEmail, oldPassword, newPassword, newFullName , LOGIN);
+
+        assertEquals(ResponseStatus.INVALID_PASSWORD, response.getStatus());
+    }
+
+    @Test
+    public void testChangeData_withExistedEmail() {
+        String newPassword = "pass";
+        String newFullName = "newFN";
+
+        when(repository.findByEmail(EMAIL)).thenReturn(new Player("test", "test", "test", EMAIL));
+        ResponseEntity<Player> response = service.changePlayerData(EMAIL, PASSWORD, newPassword, newFullName , LOGIN);
+
+        assertEquals(ResponseStatus.EMAIL_NOT_VACANT, response.getStatus());
+    }
+
+    @Test
+    public void testChangeData_withWrongLogin() {
+        String login = "wrong";
+        String newEmail = "em@em.ru";
+        String newPassword = "pass";
+        String newFullName = "newFN";
+
+        ResponseEntity<Player> response = service.changePlayerData(newEmail, PASSWORD, newPassword, newFullName, login);
+
+        assertEquals(ResponseStatus.ACCOUNT_NOT_FOUND, response.getStatus());
     }
 }
