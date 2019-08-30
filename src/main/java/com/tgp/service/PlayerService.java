@@ -1,7 +1,6 @@
 package com.tgp.service;
 
 import com.tgp.entity.Player;
-import com.tgp.exception.IllegalStatusException;
 import com.tgp.repository.PlayerRepository;
 import com.tgp.service.response.ResponseEntity;
 import com.tgp.service.response.ResponseStatus;
@@ -95,52 +94,7 @@ public class PlayerService {
         return status;
     }
 
-    //TODO move message creating to enum
-    private ResponseEntity<Player> generateResponse(Player data, ResponseStatus status) throws IllegalStatusException {
-        String message;
-        switch (status) {
-            case ACCOUNT_CREATED: {
-                message = "Аккаунт успешно создан";
-                break;
-            }
-            case AUTHENTICATED_SUCCESSFULLY: {
-                message = "Пользователь авторизован успешно";
-                break;
-            }
-            case EMAIL_NOT_VACANT: {
-                message = "Такая почта уже занята";
-                break;
-            }
-            case LOGIN_NOT_VACANT: {
-                message = "Такой логин уже занят";
-                break;
-            }
-            case INVALID_PASSWORD: {
-                message = "Неверный пароль";
-                break;
-            }
-            case ACCOUNT_NOT_FOUND: {
-                message = "Аккаунт с такими данными не найден";
-                break;
-            }
-            case INTERNAL_ERROR: {
-                message = "Внутренняя ошибка сервера";
-                break;
-            }
-            case PASSWORD_MISS_MATCH: {
-                message = "Пароли не совпадают";
-                break;
-            }
-            case DATA_SUCCESSFULLY_CHANGED: {
-                message = "Данные успешно изменены";
-                break;
-            }
-            default: {
-                log.error("Illegal stats={}", status);
-                throw new IllegalStatusException();
-            }
-        }
-
-        return new ResponseEntity<>(data, message, status);
+    private ResponseEntity<Player> generateResponse(Player data, ResponseStatus status) {
+        return new ResponseEntity<>(data, status.getMessage(), status);
     }
 }
